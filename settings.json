@@ -1,0 +1,9 @@
+{
+  "CAMERA_SERIAL": "<your-camera-serial-number>",
+  "SENSOR_SERIAL": "<your-sensor-serial-number>",
+  "MERAKI_API_KEY": "<your-meraki-api-key>",
+  "BOT_API_KEY": "<your-webex-bot-api-key>",
+  "WEBEX_EMAIL": "<your-webex-email>",
+  "WEBHOOK": "<your-webhook-url>",
+  "NETWORK": "<your-meraki-network-id>"
+}

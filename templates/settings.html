@@ -1,0 +1,104 @@
+{% extends "masterPage.html" %}
+
+{% block content %}
+
+<div>
+    <form action="/settings2" method="post" style="margin: 50px;">
+        <div class="form-group base-margin-bottom">
+            <div class="form-group__text">
+                <input name="apikey" required="">
+                <label for="input-type-email">Meraki API key*</label>
+            </div>
+        </div>
+        <div class="form-group base-margin-bottom">
+            <div class="form-group__text">
+                <input name="botkey" required="">
+                <label for="input-type-email">Webex bot API key*</label>
+            </div>
+        </div>
+        <div class="form-group base-margin-bottom">
+            <div class="form-group__text">
+                <input name="email" required="">
+                <label for="input-type-email">Webex account e-mail*</label>
+            </div>
+        </div>
+        <div class="form-group base-margin-bottom">
+            <div class="form-group__text">
+                <input name="webhook" required="">
+                <label for="input-type-email">Webhook URL*</label>
+            </div>
+        </div>
+        {% if stage == "key" %}
+        <button class="btn btn--primary" onclick="showNetworks()" type="submit">Submit</button>
+        {% else %}
+        <button class="btn btn--primary" onclick="showNetworks()" type="submit" disabled>Submitted</button>
+        {% endif %}
+    </form>
+</div>
+
+<div id="step2" {% if stage == "key" %} hidden {% endif %}>
+    <form action="/settings3" method="post" style="margin: 50px;">
+        <div class="form-group base-margin-bottom">
+            <div class="form-group__text select">
+                <select name="organization" id='organizations_select' required>
+                    <option disabled selected hidden value="0">Please choose...</option>
+                    {% for orga in dropdown_content %}<option value="{{orga.orgaid}}" {% if selected_elements.organization == orga.orgaid %} selected {% endif %}>{{orga.organame}} (ID:{{orga.orgaid}})</option>{% endfor %}
+                </select>
+                <label for="organizations_select">Organization*</label>
+            </div>
+        </div>
+
+        {% for orga in dropdown_content %}
+        <div id="{{orga.orgaid}}" class="network-select" {% if selected_elements.organization != orga.orgaid %} hidden {% endif %}>
+            <div class="form-group base-margin-bottom">
+                <div class="form-group__text select">
+                    <select name="network" class='networks'>
+                        <option disabled selected hidden value="0">Please choose...</option>
+                        {% for network in orga['networks'] %}
+                            <option value="{{network['networkid']}}" {% if selected_elements.network_id == network['networkid'] %} selected {% endif %}>{{network['networkname']}} (ID:{{network['networkid']}})</option>                                                      
+                        {% endfor %}
+                    </select>
+                    <label for="network">Network*</label>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        {% if stage == "cam" %}
+        <button class="btn btn--primary" onclick="showNetworks()" type="submit" disabled>Submitted</button>
+        {% else %}
+        <button class="btn btn--primary" onclick="showNetworks()" type="submit">Submit</button>
+        {% endif %}
+    </form>
+</div>
+
+<div id="step3" {% if stage == "cam" %} {% else %} hidden {% endif %}>
+    <form action="/settings4" method="post" style="margin: 50px;">
+        <div class="form-group base-margin-bottom">
+            <div class="form-group__text select">
+                <select name="camera" id='organizations_select' required>
+                    <option disabled selected hidden value="0">Please choose...</option>
+                    {% for c in cameras %}
+                    <option value="{{c.id}}">{{c.name}} (ID:{{c.id}})</option>
+                    {% endfor %}
+                </select>
+                <label for="organizations_select">Camera*</label>
+            </div>
+        </div>
+
+        <div class="form-group base-margin-bottom">
+            <div class="form-group__text select">
+                <select name="sensor" id='organizations_select' required>
+                    <option disabled selected hidden value="0">Please choose...</option>
+                    {% for s in sensors %}
+                    <option value="{{s.id}}">{{s.name}} (ID:{{s.id}})</option>
+                    {% endfor %}
+                </select>
+                <label for="organizations_select">Sensor*</label>
+            </div>
+        </div>
+
+        <button class="btn btn--primary" onclick="showNetworks()" type="submit">Submit</button>
+    </form>
+</div>
+
+{% endblock %}
